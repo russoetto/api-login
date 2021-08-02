@@ -94,13 +94,14 @@ class LoginController {
   }
 
   getUser(request, response) {
-    let token = request.headers['authentication'].replace('Bearer ', '');
+    let token = request.headers['authentication'];
     if (!token) {
       response.status(400).json({ mensagem: 'Autenticação obrigatória.'});
     } else if (!request.params.id) {
       response.status(400).json({ mensagem: 'Id não preenchido.' })
     }
     else {
+      token = token.replace('Bearer ', '');
       jwt.verify(token, process.env.JWTKEY, function(err, decoded) {
         if (err) {
           console.error(err);
